@@ -11,8 +11,9 @@ import retrofit2.converter.gson.GsonConverterFactory
 class MoviesSagaRepository {
 
     var listMovies = MutableLiveData<MutableList<MoviesSagaModel>>()
+    var auxListMovies: MutableList<MoviesSagaModel>? = arrayListOf()
 
-    fun getMovies(): MutableLiveData<MutableList<MoviesSagaModel>>{
+    fun getMovies(): MutableLiveData<MutableList<MoviesSagaModel>>?{
 
         var retrofit = Retrofit.Builder()
             .baseUrl("https://private-b34167-rvmarvel.apiary-mock.com")
@@ -31,6 +32,7 @@ class MoviesSagaRepository {
             }
 
             override fun onFailure(call: Call<MutableList<MoviesSagaModel>>, t: Throwable) {
+                listMovies.value = auxListMovies
             }
         })
         return listMovies

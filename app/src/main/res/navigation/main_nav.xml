@@ -24,10 +24,27 @@
         <argument
             android:name="movieDetails"
             app:argType="com.denybrabo.fortesfilms.models.MoviesSagaModel" />
+        <argument
+            android:name="favorite"
+            app:argType="boolean" />
+        <action
+            android:id="@+id/action_movieDetailsFragment_to_homeFragment"
+            app:destination="@id/homeFragment"
+            app:popUpTo="@id/homeFragment"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/moviesFavoriteFragment"
         android:name="com.denybrabo.fortesfilms.ui.MoviesFavoriteFragment"
         android:label="fragment_movies_favorite"
-        tools:layout="@layout/fragment_movies_favorite" />
+        tools:layout="@layout/fragment_movies_favorite" >
+        <action
+            android:id="@+id/action_moviesFavoriteFragment_to_movieDetailsFragment"
+            app:destination="@id/movieDetailsFragment" />
+        <action
+            android:id="@+id/action_moviesFavoriteFragment_to_homeFragment"
+            app:destination="@id/homeFragment"
+            app:popUpTo="@id/homeFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
 </navigation>

@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.get
 import androidx.navigation.fragment.findNavController
@@ -12,6 +13,7 @@ import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.denybrabo.fortesfilms.R
 import com.denybrabo.fortesfilms.databinding.FragmentMovieDetailsBinding
+import com.denybrabo.fortesfilms.models.MoviesFavoriteModel
 import com.denybrabo.fortesfilms.viewmodels.MovieDetailsViewModel
 
 class MovieDetailsFragment : Fragment() {
@@ -50,11 +52,38 @@ class MovieDetailsFragment : Fragment() {
     }
 
     fun setListerner(){
+        var p: MoviesFavoriteModel = MoviesFavoriteModel(
+            id          = args.movieDetails.id,
+            title       = args.movieDetails.title,
+            year        = args.movieDetails.year,
+            rated       = args.movieDetails.rated,
+            released    = args.movieDetails.released,
+            runtime     = args.movieDetails.runtime,
+            genre       = args.movieDetails.genre,
+            director    = args.movieDetails.director,
+            writer      = args.movieDetails.writer,
+            actors      = args.movieDetails.actors,
+            plot        = args.movieDetails.plot,
+            poster      = args.movieDetails.poster
+        )
+
         binding.backDetails.setOnClickListener {
-            findNavController().popBackStack()
+            findNavController().navigate(R.id.action_movieDetailsFragment_to_homeFragment)
         }
-        binding.buttonAddFavorite.setOnClickListener {
-            viewModel.addMovie(args.movieDetails)
+        if (!args.favorite){
+            binding.buttonAddFavorite.setOnClickListener {
+                if (p != null) {
+                    viewModel.addFavoriteMovie(p)
+                    Toast.makeText(requireContext(), "Sucesso ao salvar", Toast.LENGTH_LONG).show()
+                }
+            }
+        } else{
+            binding.buttonAddFavorite.text = "Remover dos favoritos"
+            binding.buttonAddFavorite.setOnClickListener {
+                viewModel.deleteFavoriteMovie(p)
+                Toast.makeText(requireContext(), "Removido dos favoritos\ncom sucesso", Toast.LENGTH_LONG).show()
+                findNavController().navigate(R.id.action_movieDetailsFragment_to_homeFragment)
+            }
         }
     }
 

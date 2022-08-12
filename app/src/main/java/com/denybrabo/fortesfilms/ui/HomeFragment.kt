@@ -15,6 +15,7 @@ import com.denybrabo.fortesfilms.adapter.MoviesAdapter
 import com.denybrabo.fortesfilms.databinding.FragmentHomeBinding
 import com.denybrabo.fortesfilms.models.MoviesSagaModel
 import com.denybrabo.fortesfilms.viewmodels.HomeViewModel
+import com.denybrabo.fortesfilms.viewmodels.MovieDetailsViewModel
 
 class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
@@ -22,6 +23,7 @@ class HomeFragment : Fragment() {
     // onDestroyView.
     private val binding get() = _binding!!
     private lateinit var viewModel: HomeViewModel
+    private lateinit var offViewModel: MovieDetailsViewModel
     private var listMovies: MutableList<MoviesSagaModel> = arrayListOf()
     private var auxListMovies: MutableList<MoviesSagaModel> = arrayListOf()
     private var visibility: Boolean = true
@@ -29,6 +31,7 @@ class HomeFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel = ViewModelProvider(this).get()
+        offViewModel = ViewModelProvider(this).get()
     }
 
     override fun onCreateView(
@@ -45,13 +48,35 @@ class HomeFragment : Fragment() {
         return view
     }
 
+
     fun setRecycler(){
         viewModel.getMovies()?.observe(viewLifecycleOwner){
-            listMovies = it
-            auxListMovies = it
-            binding.recyclerMovies.adapter = MoviesAdapter(listMovies)
-            binding.recyclerMovies.layoutManager = GridLayoutManager(requireContext(), 2)
+            if (it.isNotEmpty()){
+                listMovies = it
+                auxListMovies = it
+                configRecycler()
+                offViewModel.deleteAllMovies()
+                it.forEach {
+                    offViewModel.addMovie(it)
+                }
+            } else{
+                offViewModel.readAllData.observe(viewLifecycleOwner){
+                    listMovies = it
+                    auxListMovies = it
+                    configRecycler()
+                    if (listMovies.isEmpty()){
+                        binding.textViewEmptyOffMode.visibility = View.VISIBLE
+                    } else{
+                        binding.textViewEmptyOffMode.visibility = View.INVISIBLE
+                    }
+                }
+            }
         }
+    }
+
+    fun configRecycler(){
+        binding.recyclerMovies.adapter = MoviesAdapter(listMovies)
+        binding.recyclerMovies.layoutManager = GridLayoutManager(requireContext(), 2)
     }
 
     fun setView(){
@@ -74,12 +99,12 @@ class HomeFragment : Fragment() {
 
         binding.filter.setOnClickListener {
             listMovies = auxListMovies.filter { it.runtime.substring(0,3).toInt() <= 120 }.toMutableList()
-            binding.recyclerMovies.adapter = MoviesAdapter(listMovies)
+            configRecycler()
         }
 
         binding.filter2.setOnClickListener {
             listMovies = auxListMovies.filter { it.runtime.substring(0,3).toInt() >= 120 }.toMutableList()
-            binding.recyclerMovies.adapter = MoviesAdapter(listMovies)
+            configRecycler()
         }
 
         binding.filterAll.setOnClickListener {
