@@ -11,6 +11,7 @@
 - Coroutines
 - Navigation e navigation args
 - Talvez eu possa ter esquecido de mencionar alguma stack então dé uma olhada mais detalhada
+- A filtragem por avaliação eu não coloquei pois todas estavam em PG-13, então eu fiz uma filtragem por tempo de filme.
 
 ##
 # Telas
