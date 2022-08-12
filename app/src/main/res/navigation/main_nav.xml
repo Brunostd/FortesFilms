@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_nav"
+    app:startDestination="@id/homeFragment">
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.denybrabo.fortesfilms.ui.HomeFragment"
+        android:label="HomeFragment" >
+        <action
+            android:id="@+id/action_homeFragment_to_movieDetailsFragment"
+            app:destination="@id/movieDetailsFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_moviesFavoriteFragment"
+            app:destination="@id/moviesFavoriteFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/movieDetailsFragment"
+        android:name="com.denybrabo.fortesfilms.ui.MovieDetailsFragment"
+        android:label="fragment_movie_details"
+        tools:layout="@layout/fragment_movie_details" >
+        <argument
+            android:name="movieDetails"
+            app:argType="com.denybrabo.fortesfilms.models.MoviesSagaModel" />
+    </fragment>
+    <fragment
+        android:id="@+id/moviesFavoriteFragment"
+        android:name="com.denybrabo.fortesfilms.ui.MoviesFavoriteFragment"
+        android:label="fragment_movies_favorite"
+        tools:layout="@layout/fragment_movies_favorite" />
+</navigation>
